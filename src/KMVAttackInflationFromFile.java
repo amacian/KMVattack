@@ -16,7 +16,7 @@ public class KMVAttackInflationFromFile {
 	/**
 	 * Reads the Attack sets from specific files, load them to sketches and check that 
 	 * they provide the expected overestimation similar to the expected cardinality 
-	 * @param args
+	 * @param args Command line arguments (ignored)
 	 */
 	public static void main (String[] args) {
 		// cardinalities to be tested

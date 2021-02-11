@@ -20,7 +20,7 @@ public class KMVAttackDeflation {
 	 * Implements the deflation algorithm from the paper for different values of t.
 	 * Generates Attack sets with a big number of elements that, once inserted in
 	 * a QuickSelect KMV Sketch, are estimated as smaller size sets.
-	 * @param args
+	 * @param args Command line arguments (ignored)
 	 */
 	public static void main (String[] args) {
 		// Values of t to be tested [limiting the number of elements added to the sketch]
@@ -167,7 +167,7 @@ public class KMVAttackDeflation {
 	 * Creates the original set with all the unique elements.
 	 * @param size Size of the set
 	 * @param random Generator of the finalCardinal elements in a pseudo-random way
-	 * @return
+	 * @return the Set of unique elements
 	 */
 	public static final Set<Double> generateS (int size, Random random){
 		// Create the Set 

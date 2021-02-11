@@ -21,7 +21,7 @@ public class KMVAttackInflation {
 	 * Generates Attack sets with a reduced number of elements that, once inserted in
 	 * a QuickSelect KMV Sketch, are estimated as bigger size sets.
 	 * Sets are stored to file too. 
-	 * @param args
+	 * @param args Command line arguments (ignored)
 	 */
 	public static void main (String[] args) {
 		// cardinalities to be tested
@@ -125,7 +125,7 @@ public class KMVAttackInflation {
 	 * @param finalCardinal Initial cardinality of the original set that will be reduced
 	 * @param builder Configured element in charge of building the sketch
 	 * @param random Generator of the finalCardinal elements in a pseudo-random way
-	 * @return
+	 * @return Initial reduced set I
 	 */
 	private static final ArrayList<Double> createSet (int finalCardinal, UpdateSketchBuilder builder, Random random){
 		  
@@ -163,7 +163,7 @@ public class KMVAttackInflation {
 	 * in the estimation.
 	 * @param iAttack Initial attack set as an ArrayList that will be further reduced.
 	 * @param builder Configured element in charge of building the sketch
-	 * @return
+	 * @return Attack set A
 	 */
 	public static final ArrayList<Double> reduceSet (ArrayList<Double> iAttack, UpdateSketchBuilder builder){
 
