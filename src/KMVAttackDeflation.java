@@ -37,13 +37,37 @@ public class KMVAttackDeflation {
 		// Directory where the file will be stored
 		String directory ="./";
 
-		// Nominal entries for the sketch
+		// Default nominal entries for the sketch
 		int K = 1024;
+		// By default, numbers to be fed to the set will be generated randomly,
+		boolean rand = true;
+		// If arguments are passed, then K and randomness may not be taken the default values
+		if (args.length>0) {
+			try {
+				// First argument is K and should be integer. Otherwise, 1024 will be used by default.
+				K=Integer.parseInt(args[0]);
+				System.out.println("Using K="+K);
+			}catch(NumberFormatException nfe) {
+				System.out.println("Format of K is not an integer, using K="+K);
+			}
+			
+			try {
+				// Second argument selects between random or sequential numbers to be fed into the initial set.
+				// if "seq" string is provided, sequential integer numbers will be used. Otherwise, random double numbers are used.
+				if("seq".equals(args[1])) {
+					rand=false;
+					System.out.println("Using sequential integers");
+				}
+			} catch (Exception e) {
+				System.out.println("Using random double values");
+			}
+		}
+
 		
 		// Generate a Sketch Builder. By default it uses QuickSelect KMV
 		UpdateSketchBuilder builder = UpdateSketch.builder();
 		
-		// Set K=1024
+		// Set K (1024 by default)
 		builder.setNominalEntries(K);
 		
 		// Set a random seed for reproducibility
@@ -74,7 +98,7 @@ public class KMVAttackDeflation {
 				  // Repeat as many times as number of experiments defined (for each t) 
 				  for (int iter=0;iter<reps;iter++) {
 					  // Generate a set with a big number of unique elements
-					  Set<Double> sSet = generateS(10000000, random);
+					  Set<Double> sSet = generateS(10000000, random, rand);
 					  // Attack set to be filled
 					  ArrayList<Double> aSet = new ArrayList<Double>();
 	
@@ -167,15 +191,17 @@ public class KMVAttackDeflation {
 	 * Creates the original set with all the unique elements.
 	 * @param size Size of the set
 	 * @param random Generator of the finalCardinal elements in a pseudo-random way
+	 * @param rand If true, random parameter is used. Otherwise, sequential integer elements are fed into the initial set. 
 	 * @return the Set of unique elements
 	 */
-	public static final Set<Double> generateS (int size, Random random){
+	public static final Set<Double> generateS (int size, Random random, boolean rand){
 		// Create the Set 
 		Set<Double> s = new HashSet<Double>();
 		
 		// Add elements to the set until the expected size is reached.
+		int i=0;
 		while (s.size()<size) {
-			double nextdob = random.nextDouble();
+			double nextdob = (rand)?random.nextDouble():i++;
 			s.add(nextdob);
 		}
 

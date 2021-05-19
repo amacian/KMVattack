@@ -21,11 +21,38 @@ public class KMVAttackInflation {
 	 * Generates Attack sets with a reduced number of elements that, once inserted in
 	 * a QuickSelect KMV Sketch, are estimated as bigger size sets.
 	 * Sets are stored to file too. 
-	 * @param args Command line arguments (ignored)
+	 * @param args Command line arguments. Optional. If present, they should include the value of K and selection between random/sequential values for the initial set.
+	 * E.g. 1024 seq  sets K=1024 and sequential values.
 	 */
 	public static void main (String[] args) {
 		// cardinalities to be tested
 		int[] cards = {10000, 28480, 81113, 231013, 657933, 1873817, 5336699, 15199111, 43287613, 123284674, 351119173, 1000000000};
+		
+		// Default initialization of the K minimum value.
+		int K = 1024;
+		// By default, numbers to be fed to the set will be generated randomly,
+		boolean rand = true;
+		// If arguments are passed, then K and randomness may not be taken the default values
+		if (args.length>0) {
+			try {
+				// First argument is K and should be integer. Otherwise, 1024 will be used by default.
+				K=Integer.parseInt(args[0]);
+				System.out.println("Using K="+K);
+			}catch(NumberFormatException nfe) {
+				System.out.println("Format of K is not an integer, using K="+K);
+			}
+			
+			try {
+				// Second argument selects between random or sequential numbers to be fed into the initial set.
+				// if "seq" string is provided, sequential integer numbers will be used. Otherwise, random double numbers are used.
+				if("seq".equals(args[1])) {
+					rand=false;
+					System.out.println("Using sequential integers");
+				}
+			} catch (Exception e) {
+				System.out.println("Using random double values");
+			}
+		}
 		
 		// Number of experiments per cardinality to obtain the mean
 		int reps = 10;
@@ -36,8 +63,8 @@ public class KMVAttackInflation {
 		String directory ="./";
 		// Generate a Sketch Builder. By default it uses KMV
 		UpdateSketchBuilder builder = UpdateSketch.builder();
-		// Set K=1024
-		builder.setNominalEntries(1024);
+		// Set K (1024 by default)
+		builder.setNominalEntries(K);
 		
 		// Set a random seed for reproducibility
 		long repeat = 102030;
@@ -58,8 +85,8 @@ public class KMVAttackInflation {
 				  String filename = directory+prefix+cardinality+"_"+iter+".set";
 				  try {
 					  PrintWriter fw = new PrintWriter(new FileWriter(filename));
-					  // Create the set and retrieve I
-					  ArrayList<Double> iSet = createSet(cardinality, builder, random);
+					  // Create the set and retrieve I. 
+					  ArrayList<Double> iSet = createSet(cardinality, builder, random, rand);
 					  
 					  // Populate an empty sketch with I and calculate estimation
 					  double[] metrics = validateSet(iSet, builder);
@@ -125,9 +152,10 @@ public class KMVAttackInflation {
 	 * @param finalCardinal Initial cardinality of the original set that will be reduced
 	 * @param builder Configured element in charge of building the sketch
 	 * @param random Generator of the finalCardinal elements in a pseudo-random way
+	 * @param rand If true, random parameter is used. Otherwise, sequential integer elements are fed into the initial set.
 	 * @return Initial reduced set I
 	 */
-	private static final ArrayList<Double> createSet (int finalCardinal, UpdateSketchBuilder builder, Random random){
+	private static final ArrayList<Double> createSet (int finalCardinal, UpdateSketchBuilder builder, Random random, boolean rand){
 		  
 		// Create and empty KMV sketch with the configuration defined outside of the function
 		UpdateSketch sketch = builder.build();
@@ -140,7 +168,7 @@ public class KMVAttackInflation {
 
 		// Generate a set of finalCardinal elements
 		for (int i=0; i<finalCardinal; i++) {
-			double nextdob = random.nextDouble();
+			double nextdob = (rand)?random.nextDouble():i;
 			// Store them in the sketch
 			sketch.update(nextdob);
 			// If the new estimate is higher than the previous one, add it to I, otherwise ignore it

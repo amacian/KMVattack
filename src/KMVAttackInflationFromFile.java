@@ -21,7 +21,20 @@ public class KMVAttackInflationFromFile {
 	public static void main (String[] args) {
 		// cardinalities to be tested
 		int[] cards = {10000, 28480, 81113, 231013, 657933, 1873817, 5336699, 15199111, 43287613, 123284674, 351119173, 1000000000};
-		
+
+		// Default initialization of the K minimum value.
+		int K = 1024;
+		// If arguments are passed, then K and randomness may not be taken the default values
+		if (args.length>0) {
+			try {
+				// First argument is K and should be integer. Otherwise, 1024 will be used by default.
+				K=Integer.parseInt(args[0]);
+				System.out.println("Using K="+K);
+			}catch(NumberFormatException nfe) {
+				System.out.println("Format of K is not an integer, using K="+K);
+			}			
+		}
+
 		// Number of experiments per cardinality. There should be a file per repetition
 		int reps = 10;
 
@@ -31,8 +44,8 @@ public class KMVAttackInflationFromFile {
 		String directory ="./";
 		// Generate a Sketch Builder. By default it uses KMV
 		UpdateSketchBuilder builder = UpdateSketch.builder();
-		// Set K=1024
-		builder.setNominalEntries(1024);
+		// Set K (1024 by default)
+		builder.setNominalEntries(K);
 		
 		// For each of the cardinalities
 		for (int cardinality:cards) {
