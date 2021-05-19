@@ -15,6 +15,8 @@ Apache DataSketckes Java Core API > 1.3.0
 
 *doc* includes the Javadoc files for the classes.
 
+*ideal* implementation of the ideal KMV sketch in Matlab for the simulations.
+
 # Execution of the code
 Compile and execute the appropriate Java class depending on the type of attack to be simulated.
 If different cardinalities, t values or iterations are required, just change the variables in the Java classes, recompile and execute.
