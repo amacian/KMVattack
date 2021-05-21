@@ -21,3 +21,7 @@ Apache DataSketckes Java Core API > 1.3.0
 Compile and execute the appropriate Java class depending on the type of attack to be simulated.
 If different cardinalities, t values or iterations are required, just change the variables in the Java classes, recompile and execute.
 
+If no command-line parameters are received, a value of K=1024 is used and random double numbers are generated to populate the original sets.
+If command-line parameters are passed to the classes, two should be present. First one is an integer with the value of K, and the second one must be either "seq" (to use sequential integer numbers instead of random double numbers) or any other value if random double values are to be used.
+E.g. java KMVAttackInflation 4096 random
+     java KMVAttackDeflation 256 seq
