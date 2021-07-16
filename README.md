@@ -4,6 +4,8 @@ This repository includes the code in Java of the Inflation and Deflation attacks
 
 P. Reviriego, A. Sánchez-Macián, S. Liu and F. Lombardi "On the Security of the K Minimum Values (KMV) Sketch", under submission to IEEE Transactions on Dependable and Secure Computing.
 
+It also includes an Annex with additional results to those presented in the paper.
+
 # Dependencies
 Apache DataSketckes Java Core API > 1.3.0
 
